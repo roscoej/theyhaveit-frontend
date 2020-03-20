@@ -12,6 +12,9 @@
                 width: 100%;
                 border: 1px solid #E0E0E0;
                 font-size: 1rem;
+                @media screen and (max-width: 768px) {
+                    font-size: 0.75rem;
+                }
             }
             .flag-dropdown {
                 border: none !important;

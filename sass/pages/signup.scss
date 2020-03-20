@@ -3,6 +3,7 @@
         h1 {
             font-size: 1.5rem;
             margin: 0 0 25px 0;
+            font-weight: normal;
         }
         section {
             width: 350px;
@@ -19,6 +20,9 @@
                 border: 1px solid #D6D6D6;
                 .alert__list {
                     padding: 25px 30px;
+                    height: 175px;
+                    max-height: 175px;
+                    overflow-y: auto;
                 }
                 p {
                     margin: 0;
@@ -72,6 +76,13 @@
                 h2 {
                     font-size: 1.25rem;
                 }
+            }
+        }
+        @media screen and (max-width: 768px) {
+            margin-top: 20px !important;
+            margin-bottom: 20px !important;
+            section {
+                padding: 0 !important; 
             }
         }
     }

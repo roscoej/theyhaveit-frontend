@@ -76,6 +76,7 @@
     position: relative;
     width: 24px;
     height: 20px;
+    z-index: 0 !important;
     * {
         color: $color-primary;
         background-color: $color-primary;
