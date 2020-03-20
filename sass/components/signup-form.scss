@@ -1,0 +1,33 @@
+// Custom react-phone-input-2 styles
+.component {
+    &.signup-form {
+        position: relative;
+        display: flex;
+        align-items: center;
+        .react-tel-input {
+            .form-control {
+                padding-top: 12px;
+                padding-bottom: 12px;
+                height: auto;
+                width: 100%;
+                border: 1px solid #E0E0E0;
+                font-size: 1rem;
+            }
+            .flag-dropdown {
+                border: none !important;
+                background: transparent;
+                .selected-flag {
+                    background: transparent;
+                }
+            }
+        }
+        .button {
+            z-index: 500;
+            font-size: 1rem;
+            position: absolute;
+            right: 8px;
+            height: 30%;
+            padding-bottom: 11px;
+        }
+    }
+}

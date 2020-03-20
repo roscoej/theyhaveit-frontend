@@ -1,0 +1,73 @@
+import React from 'react';
+import PageWrapper from '../components/PageWrapper';
+import ListTable from '../components/ListTable';
+import { IListItem, IFilter } from '../common/interfaces';
+
+interface IState {
+    search: string,
+    loading: boolean,
+    data: Array<IListItem>,
+    filters: Array<IFilter>,
+};
+
+export default class List extends React.Component<{}, IState> {
+    state = {
+        loading: true,
+        search: "",
+        data: [],
+        filters: [],
+    };
+
+    fetch = async () => {
+        await new Promise(resolve => {
+            setTimeout(() => {
+                this.setState({
+                    filters: [
+                        {
+                            label: "Item",
+                            name: "item",
+                            options: [
+                                {value: "HAND_SANITIZER", label: "Hand Sanitizer"}
+                            ],
+                        }
+                    ],
+                    data: [
+                        {
+                            name: "Dunkin' Donuts",
+                            vendor: "Dunkin' Donuts",
+                            date: "Today",
+                            url: "http://",
+                            img: "",
+                        },
+                    ]
+                });
+                return resolve();
+            }, 500);
+        });
+    };
+
+    search = async (search: string) => {
+        this.setState({ loading: true });
+        await new Promise(resolve => setTimeout(resolve, 1000));
+        this.setState({ loading: false });
+    }
+
+    render() {
+        const { data, filters, loading } = this.state;
+        return (
+            <PageWrapper title="Stock List" name="list" loadData={() => this.fetch()} onLoadData={() => this.setState({ loading: false })}>
+                <section>
+                    {loading ? (
+                        <div className="spinner" />
+                    ) : (
+                        <ListTable
+                            data={data}
+                            filters={filters}
+                            onSubmitSearch={(search: string) => this.search(search)}
+                        />
+                    )}
+                </section>
+            </PageWrapper>
+        );
+    };
+};

@@ -1,0 +1,49 @@
+.spinner {
+    box-sizing: border-box;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 40px;
+    height: 40px;
+    margin-top: -20px;
+    margin-left: -20px;
+    border-radius: 50%;
+    border: 2px solid $color-primary;
+    border-top-color: $color-primary;
+    animation: spinner 1s cubic-bezier(0.785, 0.135, 0.15, 0.86) infinite;
+}
+
+.spinner-relative {
+    box-sizing: border-box;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    border: 2px solid $color-primary;
+    border-top-color: $color-primary;
+    animation: spinner .5s cubic-bezier(0.785, 0.135, 0.15, 0.86) infinite;
+}
+
+@keyframes spinner {
+    to {transform: rotate(360deg);}
+}
+
+@mixin spinner {
+    &::before {
+        content: '';
+        box-sizing: border-box;
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        width: 20px;
+        height: 20px;
+        margin-top: -10px;
+        margin-left: -10px;
+        border-radius: 50%;
+        border: 2px solid $color-primary;
+        border-top-color: #fff;
+        animation: spinner .5s cubic-bezier(0.785, 0.135, 0.15, 0.86) infinite;
+    }
+    @keyframes spinner {
+        to {transform: rotate(360deg);}
+    }   
+}

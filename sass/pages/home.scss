@@ -1,0 +1,30 @@
+.page-home {
+    section {
+        padding: 60px 40px;
+        min-width: 350px;
+        &:first-of-type {
+            border-bottom: 1px solid rgba(43, 43, 43, 0.2);
+        }
+        h1, h2 {
+            margin: 0 auto;
+            text-align: center;
+            font-size: 2.5rem;
+            u {
+                color: $color-primary;
+                text-decoration-color: $color-primary;
+            }
+            span {
+                color: $color-primary;
+            }
+        }
+        h2 {
+            margin-top: 35px;
+            font-size: 2rem;
+            font-weight: normal;
+        }
+        p {
+            text-align: center;
+            margin: 0 0 15px 0;
+        }
+    }
+}

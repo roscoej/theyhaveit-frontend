@@ -1,0 +1,38 @@
+// Modal styles for signup alert list
+.ReactModalPortal {
+    .ReactModal__Overlay {
+        background-color: rgba(0, 0, 0, 0.5) !important;
+    }
+    .modal__body {
+        display: flex;
+        flex-direction: column;
+        .modal__list {
+            display: flex;
+            flex-direction: column;
+            max-height: 500px;
+            overflow-y: auto;
+            border-top: 1px solid $color-border;
+            border-bottom: 1px solid $color-border;
+            padding: 20px 25px;
+            // Checkboxes
+            .MuiCheckbox-colorSecondary.Mui-checked {
+                color: $color-primary;
+            }
+        }
+        .modal__header, .modal__action {
+            position: relative;
+            padding: 35px 50px;
+            &.modal__header h1 {
+                margin: 0;
+                font-size: 1.5rem;
+                font-weight: normal;
+            }
+            &.modal__action {
+                .button {
+                    width: 60%;
+                    margin: 0 auto;
+                }
+            }
+        }
+    }
+}
