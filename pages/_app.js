@@ -2,6 +2,7 @@ import App, { Container } from 'next/app';
 import { ToastContainer } from 'react-toastify';
 import Modal from 'react-modal';
 import '../sass/index.scss';
+import 'react-tippy/dist/tippy.css'
 import 'react-toastify/dist/ReactToastify.css';
 
 class MyApp extends App {
@@ -12,7 +13,6 @@ class MyApp extends App {
   				<Component {...pageProps} />
 				<ToastContainer />
 			</React.Fragment>
-			
 		);
   	}
 };

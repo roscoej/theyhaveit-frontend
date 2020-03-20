@@ -32,5 +32,10 @@
             height: 30%;
             padding-bottom: 11px;
         }
+        img.check {
+            position: absolute;
+            right: 15px;
+            pointer-events: none;
+        }
     }
 }

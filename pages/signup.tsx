@@ -1,5 +1,7 @@
 import React from 'react';
+import Router from 'next/router';
 import Modal from 'react-modal';
+import { Tooltip } from 'react-tippy';
 import { toast } from 'react-toastify';
 import FormGroup from '@material-ui/core/FormGroup';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
@@ -12,22 +14,43 @@ import { allAlertTypes, mainAlertTypes }  from '../common/alerts';
 
 import { AxiosError } from 'axios';
 
+interface IProps {
+	query?: {
+		phone: string,
+		country: string,
+	},
+};
+
 interface IState {
 	alertSettings: Array<string>,
     phone: string,
-    zip: string,
+	zip: string,
+	zipValid: boolean,
 	loading: boolean,
 	modalOpen: boolean,
 };
 
-export default class SignUp extends React.Component<{}, IState> {
+export default class SignUp extends React.Component<IProps, IState> {
 	state = {
 		alertSettings: [],
         phone: "",
-        zip: "",
+		zip: "",
+		zipValid: false,
 		loading: false,
 		modalOpen: false,
 	};
+
+	static getInitialProps(ctx: any) {
+		const { query } = ctx;
+		return { query };
+	}
+
+	componentDidMount() {
+		const { query } = this.props;
+		if (!query || !query.phone || !query.country) {
+			return Router.push("/");
+		}
+	}
 
 	onChangeAlertSetting = (value: string) => {
 		let alertSettings : string[] = this.state.alertSettings;
@@ -71,6 +94,24 @@ export default class SignUp extends React.Component<{}, IState> {
 		});
 	};
 
+	isValidZip = (zip: string, countryCode: string | undefined) => {
+		if (!countryCode || !zip) {
+			return false;
+		}
+		let postalCodeRegex = null;
+		switch (countryCode.toUpperCase()) {
+			case "US":
+				postalCodeRegex = /^([0-9]{5})(?:[-\s]*([0-9]{4}))?$/;
+				break;
+			case "CA":
+				postalCodeRegex = /^([A-Z][0-9][A-Z])\s*([0-9][A-Z][0-9])$/;
+				break;
+			default:
+				postalCodeRegex = /^(?:[A-Z0-9]+([- ]?[A-Z0-9]+)*)?$/;
+		}
+		return postalCodeRegex.test(zip);
+	};
+
 	onChangeZip = (zip: string) => {
 		if (isNaN(Number(zip))) {
 			return;
@@ -78,10 +119,12 @@ export default class SignUp extends React.Component<{}, IState> {
 		if (zip.length > 5) {
 			return;
 		}
+		let isValid = true;
 		this.setState({ zip });
 	};
 
   	render() {
+		const { query } = this.props;
 		const { modalOpen, loading, zip } = this.state;
 		let alertSettings : string[] = this.state.alertSettings;
 		let showableAlerts = mainAlertTypes;
@@ -91,20 +134,33 @@ export default class SignUp extends React.Component<{}, IState> {
 			<PageWrapper title="free in-stock alerts" name="signup">
 				<h1>Sign up to get free in-stock alerts</h1>
 				<section>
+					<Tooltip title="We use your phone number to send you in-stock alerts." className="help">
+						<img className="help" src="/static/Info.svg" alt=""/>
+					</Tooltip>
                     <label>Enter your mobile number</label>
 					<SignUpForm
-						value={"12345678"}
-                        disabled={true}
+						value={query?.phone || ""}
+						country={query?.country || ""}
+						disabled={true}
+						valid={true}
                         onSubmit={() => null}
 					/>
 				</section>
                 <section>
+					<Tooltip title="We use your zip code to find in-stock items near you." className="help">
+						<img className="help" src="/static/Info.svg" alt="" />
+					</Tooltip>
                     <label>Enter your zip code</label>
-					<input
-                        placeholder="10001"
-						onChange={e => this.onChangeZip(e.target.value)}
-						value={zip}
-                    />
+					<div className="zip-wrapper">
+						<input
+							placeholder="10001"
+							onChange={e => this.onChangeZip(e.target.value)}
+							value={zip}
+						/>
+						{this.isValidZip(zip, query?.country) && (
+							<img src="/static/Check.svg" alt="" style={{position: "absolute", right: 15}} />
+						)}
+					</div>
 				</section>
                 <section>
                     <label>Select your alert settings</label>
@@ -125,7 +181,7 @@ export default class SignUp extends React.Component<{}, IState> {
 								))}
 							</FormGroup>
 						</div>
-						<p role="link" onClick={() => this.setState({ modalOpen: true })}>Choose from 50+ more alerts</p>
+						<p role="link" onClick={() => this.setState({ modalOpen: true })}>Choose from more alerts</p>
                     </div>
                 </section>
                 <section>
