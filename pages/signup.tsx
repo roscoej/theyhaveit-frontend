@@ -49,6 +49,8 @@ export default class SignUp extends React.Component<IProps, IState> {
 		const { query } = this.props;
 		if (!query || !query.phone || !query.country) {
 			return Router.push("/");
+		} else {
+			this.setState({ phone: query.phone });
 		}
 	}
 
@@ -63,13 +65,14 @@ export default class SignUp extends React.Component<IProps, IState> {
 	};
 
 	submit = async () => {
-		const { alertSettings, phone } = this.state;
+		const { alertSettings, phone, zip } = this.state;
 		this.setState({ loading: true });
 
 		ApiRequest({
 			method: "POST",
 			url: "/signup",
 			data: {
+				zip,
 				number: "+" + phone.replace(/[^0-9]+/g,''),
 				items: alertSettings,
 			},
