@@ -18,6 +18,7 @@ interface IProps {
 	query?: {
 		phone: string,
 		country: string,
+		names?: string,
 	},
 };
 
@@ -52,6 +53,17 @@ export default class SignUp extends React.Component<IProps, IState> {
 			return Router.push("/");
 		} else {
 			this.setState({ phone: query.phone });
+			try {
+				if (query.names) {
+					const names = JSON.parse(query.names);
+					if (!names.every((v: any) => allAlertTypes.includes(v))) {
+						throw new Error("One of the names is not a valid alert type.");
+					}
+					this.setState({ alertSettings: names });
+				}
+			} catch (e) {
+				console.warn("Invalid names passed in query params.")
+			}
 		}
 		this.zip.focus();
 	}

@@ -1,7 +1,7 @@
 import React from 'react';
-//@ts-ignore
-import PhoneInput from 'react-phone-input-2';
 import 'react-phone-input-2/lib/style.css'
+//@ts-ignore
+import PhoneInput from 'react-phone-input-2'
 import Button from './Button';
 
 interface IState {
@@ -15,6 +15,7 @@ interface IProps {
     value?: string,
     country?: string,
     valid?: boolean,
+    loading?: boolean,
 };
 
 export default class SignUpForm extends React.Component<IProps, IState> {
@@ -51,7 +52,7 @@ export default class SignUpForm extends React.Component<IProps, IState> {
                     disableDropdown={disabled || false}
                 />
                 {!disabled && (
-                    <Button onClick={() => onSubmit(value, country)}>Next</Button>
+                    <Button loading={this.props.loading || false} onClick={() => onSubmit(value, country)}>Next</Button>
                 )}
                 {valid && (
 					<img className="check" src="/static/Check.svg" alt="" />

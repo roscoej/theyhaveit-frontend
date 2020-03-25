@@ -1,15 +1,41 @@
 import React from 'react';
 import Router from 'next/router';
+import ApiRequest from '../common/api';
 import { toast } from 'react-toastify';
 import PageWrapper from '../components/PageWrapper';
 import SignUpForm from '../components/SignUpForm';
 
-export default class Home extends React.Component<{}, {}> {
+interface IState {
+	loading: boolean,
+};
+
+export default class Home extends React.Component<{}, IState> {
+	state = {
+		loading: false,
+	};
+
 	submit = async (phone: string, country: string) => {
-		Router.push(`/signup?phone=${phone}&country=${country}`);
+		try {
+			this.setState({ loading: true });
+			const res = await ApiRequest({
+				method: "GET",
+				url: `/signup?number=${"+" + phone.replace(/[^0-9]+/g,'')}`
+			});
+			const { names } = res.data;
+			let url = `/signup?phone=${phone}&country=${country}`;
+			if (names.length > 0) {
+				url += `&names=${JSON.stringify(names)}`
+			}
+			Router.push(url);
+		} catch (e) {
+			console.error(e);
+			toast.error(e, { hideProgressBar: true });
+			this.setState({ loading: false })
+		}
 	};
 
   	render() {
+		const { loading } = this.state;
 		return (
 			<PageWrapper title="free in-stock alerts" name="home">
 				<section>
@@ -26,6 +52,7 @@ export default class Home extends React.Component<{}, {}> {
 							this.submit(value, country);
 						}}
 						disabled={false}
+						loading={loading}
 					/>
 				</section>
 			</PageWrapper>
