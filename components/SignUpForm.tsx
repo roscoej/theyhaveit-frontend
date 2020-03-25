@@ -37,10 +37,10 @@ export default class SignUpForm extends React.Component<IProps, IState> {
         }
         let priority = country === "ca" ? {ca:0, us:1} : {us:0, ca:1};
         return (
-            <div className="component signup-form">
+            <div className={"component signup-form" + (disabled ? " disabled" : "")}>
                 <PhoneInput
                     value={value}
-                    country={"ca"}
+                    country={"us"}
                     onChange={(value: string, country: any) => {
                         if (disabled) return null;
                         this.setState({ value, country: country.countryCode });
@@ -48,6 +48,7 @@ export default class SignUpForm extends React.Component<IProps, IState> {
                     priority={priority}
                     onlyCountries={['us', 'ca']}
                     disabled={disabled || false}
+                    disableDropdown={disabled || false}
                 />
                 {!disabled && (
                     <Button onClick={() => onSubmit(value, country)}>Next</Button>

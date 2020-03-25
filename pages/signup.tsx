@@ -31,6 +31,7 @@ interface IState {
 };
 
 export default class SignUp extends React.Component<IProps, IState> {
+	zip: any
 	state = {
 		alertSettings: [],
         phone: "",
@@ -52,6 +53,7 @@ export default class SignUp extends React.Component<IProps, IState> {
 		} else {
 			this.setState({ phone: query.phone });
 		}
+		this.zip.focus();
 	}
 
 	onChangeAlertSetting = (value: string) => {
@@ -66,6 +68,10 @@ export default class SignUp extends React.Component<IProps, IState> {
 
 	submit = async () => {
 		const { alertSettings, phone, zip } = this.state;
+		const { query } = this.props;
+		if (!this.isValidZip(zip, query?.country)) {
+			return toast.error("Please enter a valid postal code.", {hideProgressBar: true});
+		}
 		this.setState({ loading: true });
 
 		ApiRequest({
@@ -81,6 +87,7 @@ export default class SignUp extends React.Component<IProps, IState> {
 			const msg = isUpdated ? "Thanks for updating your settings, we just sent you a text!" : "Thanks for signing up, we just sent you a text!"
 			this.setState({ loading: false });
 			toast.success(msg, { hideProgressBar: true });
+			Router.push("/");
 		}).catch((error: AxiosError) => {
 			let msg = "";
 			try {
@@ -122,7 +129,6 @@ export default class SignUp extends React.Component<IProps, IState> {
 		if (zip.length > 5) {
 			return;
 		}
-		let isValid = true;
 		this.setState({ zip });
 	};
 
@@ -138,7 +144,7 @@ export default class SignUp extends React.Component<IProps, IState> {
 				<h1>Sign up to get free in-stock alerts</h1>
 				<section>
 					<Tooltip title="We use your phone number to send you in-stock alerts." className="help">
-						<img className="help" src="/static/Info.svg" alt=""/>
+						<img className="help" src="/static/Info.png" alt="" style={{width:23, height:23}}/>
 					</Tooltip>
                     <label>Enter your mobile number</label>
 					<SignUpForm
@@ -151,13 +157,16 @@ export default class SignUp extends React.Component<IProps, IState> {
 				</section>
                 <section>
 					<Tooltip title="We use your zip code to find in-stock items near you." className="help">
-						<img className="help" src="/static/Info.svg" alt="" />
+						<img className="help" src="/static/Info.png" alt=""  style={{width:23, height:23}}/>
 					</Tooltip>
                     <label>Enter your zip code</label>
 					<div className="zip-wrapper">
 						<input
+							inputMode={"numeric"}
+							pattern={"[0-9]"}
 							placeholder="10001"
 							onChange={e => this.onChangeZip(e.target.value)}
+							ref={ref => this.zip = ref}
 							value={zip}
 						/>
 						{this.isValidZip(zip, query?.country) && (
@@ -203,6 +212,7 @@ export default class SignUp extends React.Component<IProps, IState> {
 							<h1>
 								Choose your alert settings
 							</h1>
+							<img src="/static/Close.svg" alt="" role="button" onClick={() => this.setState({ modalOpen: false })} />
 						</div>
 						<div className="modal__list">
 							{allAlertTypes.map((setting, i: number) => (

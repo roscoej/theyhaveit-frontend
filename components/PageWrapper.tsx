@@ -1,4 +1,5 @@
 import React from 'react';
+import Div100vh from 'react-div-100vh';
 import Head from 'next/head';
 import Navbar from './Navbar';
 
@@ -30,8 +31,9 @@ export default class PageWrapper extends React.Component<IProps, IState> {
     }
     render() {
         const { children, title, auth, name } = this.props;
+        const stretchable = name !== "home";
         return (
-            <div className={"component page-wrapper" + (name ? ` page-${name}` : "")} id="page-wrapper">
+            <Div100vh className={"component page-wrapper" + (name ? ` page-${name}` : "")} id="page-wrapper" style={stretchable ? {minHeight: "100rvh"} : undefined}>
                 <Head>
                     <title>theyhaveit.co &mdash; {title}</title>
                 </Head>
@@ -41,7 +43,7 @@ export default class PageWrapper extends React.Component<IProps, IState> {
                 <main>
                     {children}
                 </main>
-            </div>
+            </Div100vh>
         );
     }
 };

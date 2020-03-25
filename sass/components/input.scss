@@ -7,6 +7,8 @@ input {
     height: 100%;
     box-shadow: 0 0 6px transparent;
     transition: 0.2s all;
+    display: block;
+    -webkit-appearance: none;
     &:focus {
         border-color: $color-primary !important;
         box-shadow: 0px 0px 6px rgba(255, 101, 89, 0.349);
